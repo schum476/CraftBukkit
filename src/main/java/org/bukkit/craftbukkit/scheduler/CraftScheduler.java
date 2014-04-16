@@ -118,14 +118,8 @@ public class CraftScheduler implements BukkitScheduler {
 
     public BukkitTask runTaskTimer(Plugin plugin, Runnable runnable, long delay, long period) {
         validate(plugin, runnable);
-        if (delay < 0l) {
-            delay = 0;
-        }
-        if (period == 0l) {
-            period = 1l;
-        } else if (period < -1l) {
-            period = -1l;
-        }
+        delay = setDelay(delay);
+        period = setPeriod(period);
         return handle(new CraftTask(plugin, runnable, nextId(), period), delay);
     }
 
@@ -135,15 +129,25 @@ public class CraftScheduler implements BukkitScheduler {
 
     public BukkitTask runTaskTimerAsynchronously(Plugin plugin, Runnable runnable, long delay, long period) {
         validate(plugin, runnable);
+        delay = setDelay(delay);
+        period = setPeriod(period);
+        return handle(new CraftAsyncTask(runners, plugin, runnable, nextId(), period), delay);
+    }
+    
+    public long setDelay(long delay) {
         if (delay < 0l) {
             delay = 0;
         }
+        return delay;
+    }
+    
+    public long setPeriod(long period) {
         if (period == 0l) {
             period = 1l;
         } else if (period < -1l) {
             period = -1l;
         }
-        return handle(new CraftAsyncTask(runners, plugin, runnable, nextId(), period), delay);
+        return period;
     }
 
     public <T> Future<T> callSyncMethod(final Plugin plugin, final Callable<T> task) {
