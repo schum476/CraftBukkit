@@ -58,13 +58,13 @@ public class LongHashSet {
     public boolean contains(int msw, int lsw) {
         return contains(LongHash.toLong(msw, lsw));
     }
-
-    public boolean contains(long value) {
+    
+    // search for the object (continue while !null and !this object)
+    private int searchObject(long value) {
         int hash = hash(value);
         int index = (hash & 0x7FFFFFFF) % values.length;
         int offset = 1;
 
-        // search for the object (continue while !null and !this object)
         while(values[index] != FREE && !(hash(values[index]) == hash && values[index] == value)) {
             index = ((index + offset) & 0x7FFFFFFF) % values.length;
             offset = offset * 2 + 1;
@@ -73,6 +73,11 @@ public class LongHashSet {
                 offset = 2;
             }
         }
+        return index;
+    }
+
+    public boolean contains(long value) {
+        int index = searchObject(value);
 
         return values[index] != FREE;
     }
@@ -129,19 +134,7 @@ public class LongHashSet {
     }
 
     public boolean remove(long value) {
-        int hash = hash(value);
-        int index = (hash & 0x7FFFFFFF) % values.length;
-        int offset = 1;
-
-        // search for the object (continue while !null and !this object)
-        while(values[index] != FREE && !(hash(values[index]) == hash && values[index] == value)) {
-            index = ((index + offset) & 0x7FFFFFFF) % values.length;
-            offset = offset * 2 + 1;
-
-            if (offset == -1) {
-                offset = 2;
-            }
-        }
+        int index = searchObject(value);
 
         if (values[index] != FREE) {
             values[index] = REMOVED;
