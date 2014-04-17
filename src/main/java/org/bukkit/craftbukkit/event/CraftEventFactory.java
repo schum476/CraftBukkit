@@ -401,11 +401,7 @@ public class CraftEventFactory {
 
             if (source instanceof EntityDamageSourceIndirect) {
                 damager = ((EntityDamageSourceIndirect) source).getProximateDamageSource();
-                if (damager.getBukkitEntity() instanceof ThrownPotion) {
-                    cause = DamageCause.MAGIC;
-                } else if (damager.getBukkitEntity() instanceof Projectile) {
-                    cause = DamageCause.PROJECTILE;
-                }
+                cause = checkMagicOrProjectile(damager, cause);
             } else if ("thorns".equals(source.translationIndex)) {
                 cause = DamageCause.THORNS;
             }
@@ -419,6 +415,28 @@ public class CraftEventFactory {
             return event;
         }
 
+        DamageCause cause = setCause(source);
+
+        if (cause != null) {
+            return callEntityDamageEvent(null, entity, cause, damage);
+        }
+
+        // If an event was called earlier, we return null.
+        // EG: Cactus, Lava, EntityEnderPearl "fall", FallingSand
+        return null;
+    }
+    
+    private static DamageCause checkMagicOrProjectile(Entity damager,
+            DamageCause cause) {
+        if (damager.getBukkitEntity() instanceof ThrownPotion) {
+            cause = DamageCause.MAGIC;
+        } else if (damager.getBukkitEntity() instanceof Projectile) {
+            cause = DamageCause.PROJECTILE;
+        }
+        return cause;
+    }
+
+    private static DamageCause setCause(DamageSource source) {
         DamageCause cause = null;
         if (source == DamageSource.FIRE) {
             cause = DamageCause.FIRE;
@@ -439,14 +457,7 @@ public class CraftEventFactory {
         } else if (source == DamageSource.MAGIC) {
             cause = DamageCause.MAGIC;
         }
-
-        if (cause != null) {
-            return callEntityDamageEvent(null, entity, cause, damage);
-        }
-
-        // If an event was called earlier, we return null.
-        // EG: Cactus, Lava, EntityEnderPearl "fall", FallingSand
-        return null;
+        return cause;
     }
 
     // Non-Living Entities such as EntityEnderCrystal need to call this
