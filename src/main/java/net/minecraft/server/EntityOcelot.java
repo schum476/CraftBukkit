@@ -1,5 +1,9 @@
 package net.minecraft.server;
 
+import org.bukkit.craftbukkit.CraftServer;
+import org.bukkit.craftbukkit.entity.CraftEntity;
+import org.bukkit.craftbukkit.entity.CraftOcelot;
+
 public class EntityOcelot extends EntityTameableAnimal {
 
     private PathfinderGoalTempt bq;
@@ -20,6 +24,10 @@ public class EntityOcelot extends EntityTameableAnimal {
         this.goalSelector.a(10, new PathfinderGoalRandomStroll(this, 0.8D));
         this.goalSelector.a(11, new PathfinderGoalLookAtPlayer(this, EntityHuman.class, 10.0F));
         this.targetSelector.a(1, new PathfinderGoalRandomTargetNonTamed(this, EntityChicken.class, 750, false));
+    }
+    
+    public static CraftEntity getEntity(Entity entity, CraftServer server) {
+        return new CraftOcelot(server, (EntityOcelot) entity);
     }
 
     protected void c() {

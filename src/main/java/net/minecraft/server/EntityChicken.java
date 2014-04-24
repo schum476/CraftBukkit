@@ -1,5 +1,8 @@
 package net.minecraft.server;
 
+import org.bukkit.craftbukkit.CraftServer;
+import org.bukkit.craftbukkit.entity.CraftChicken;
+import org.bukkit.craftbukkit.entity.CraftEntity;
 import org.bukkit.craftbukkit.util.CraftMagicNumbers; // CraftBukkit
 
 public class EntityChicken extends EntityAnimal {
@@ -24,6 +27,10 @@ public class EntityChicken extends EntityAnimal {
         this.goalSelector.a(5, new PathfinderGoalRandomStroll(this, 1.0D));
         this.goalSelector.a(6, new PathfinderGoalLookAtPlayer(this, EntityHuman.class, 6.0F));
         this.goalSelector.a(7, new PathfinderGoalRandomLookaround(this));
+    }
+    
+    public static CraftEntity getEntity(Entity entity, CraftServer server) {
+        return new CraftChicken(server, (EntityChicken) entity);
     }
 
     public boolean bj() {

@@ -1,5 +1,8 @@
 package net.minecraft.server;
 
+import org.bukkit.craftbukkit.CraftServer;
+import org.bukkit.craftbukkit.entity.CraftEntity;
+import org.bukkit.craftbukkit.entity.CraftMushroomCow;
 import org.bukkit.event.player.PlayerShearEntityEvent; // CraftBukkit
 
 public class EntityMushroomCow extends EntityCow {
@@ -56,6 +59,10 @@ public class EntityMushroomCow extends EntityCow {
         } else {
             return super.a(entityhuman);
         }
+    }
+    
+    public static CraftEntity getEntity(Entity entity, CraftServer server) {
+        return new CraftMushroomCow(server, (EntityMushroomCow) entity);
     }
 
     public EntityMushroomCow c(EntityAgeable entityageable) {

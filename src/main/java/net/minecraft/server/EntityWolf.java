@@ -1,5 +1,9 @@
 package net.minecraft.server;
 
+import org.bukkit.craftbukkit.CraftServer;
+import org.bukkit.craftbukkit.entity.CraftEntity;
+import org.bukkit.craftbukkit.entity.CraftWolf;
+
 public class EntityWolf extends EntityTameableAnimal {
 
     private float bq;
@@ -28,6 +32,10 @@ public class EntityWolf extends EntityTameableAnimal {
         this.targetSelector.a(3, new PathfinderGoalHurtByTarget(this, true));
         this.targetSelector.a(4, new PathfinderGoalRandomTargetNonTamed(this, EntitySheep.class, 200, false));
         this.setTamed(false);
+    }
+    
+    public static CraftEntity getEntity(Entity entity, CraftServer server) {
+        return new CraftWolf(server, (EntityWolf) entity);
     }
 
     protected void aC() {

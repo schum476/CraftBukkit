@@ -19,6 +19,7 @@ import org.bukkit.event.painting.PaintingBreakByEntityEvent;
 import org.bukkit.event.vehicle.VehicleBlockCollisionEvent;
 import org.bukkit.event.vehicle.VehicleEnterEvent;
 import org.bukkit.event.vehicle.VehicleExitEvent;
+import org.bukkit.craftbukkit.CraftServer;
 import org.bukkit.craftbukkit.CraftWorld;
 import org.bukkit.craftbukkit.entity.CraftEntity;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
@@ -114,6 +115,48 @@ public abstract class Entity {
 
     public int getId() {
         return this.id;
+    }
+    
+    public static CraftEntity getEntity(Entity entity, CraftServer server) {
+        if (entity instanceof EntityChicken) {
+            return EntityChicken.getEntity(entity, server);
+        } else if (entity instanceof EntityCow) {
+            return EntityCow.getEntity(entity, server);
+        } else if (entity instanceof EntityMushroomCow) {
+            return EntityMushroomCow.getEntity(entity, server);
+        } else if (entity instanceof EntityPig) {
+            return EntityPig.getEntity(entity, server);
+        } else if (entity instanceof EntityWolf) {
+            return EntityWolf.getEntity(entity, server);
+        } else if (entity instanceof EntityOcelot) {
+            return EntityOcelot.getEntity(entity, server);
+        } else if (entity instanceof EntitySheep) {
+            return EntitySheep.getEntity(entity, server);
+        } else { //Given entity must be a horse
+            return EntityHorse.getEntity(entity, server);
+        }
+    }
+    
+    public static boolean isEntityAnimal(Entity entity) {
+        if (entity instanceof EntityChicken) {
+            return true;
+        } else if (entity instanceof EntityCow) {
+            return true;
+        } else if (entity instanceof EntityMushroomCow) {
+            return true;
+        } else if (entity instanceof EntityPig) {
+            return true;
+        } else if (entity instanceof EntityWolf) {
+            return true;
+        } else if (entity instanceof EntityOcelot) {
+            return true;
+        } else if (entity instanceof EntitySheep) {
+            return true;
+        } else if (entity instanceof EntityHorse) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public void d(int i) {
